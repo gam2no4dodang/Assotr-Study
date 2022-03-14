@@ -1,0 +1,239 @@
+
+#include <iostream>
+
+/*
+열거체 : 사용자정의 변수 타입을 만들어줄 수 있는 기능중에
+하나이다.
+
+enum 원하는이름
+{
+};
+
+enum class 원하는이름
+{
+};
+
+enum NUMBER
+{
+	Number_1,	// 0
+	Number_2,	// 1
+	Number_3,	// 2
+	Number_4	// 3
+};
+*/
+
+/*
+형변환 : 일시적으로 다른 타입으로 변환해주는 것을 말한다.
+명시적 형변환, 암시적 형변환 2가지의 형변환 방식이 있다.
+명시적 형변환 : 형변환 시키는 것을 정확하게 표기해 주어야 한다.
+(int) 이런 식으로 변환하고자 하는 타입으로 지정해주면 된다.
+
+암시적 형변환 : 컴파일러가 타입을 구분하여 해당 타입으로 자동으로
+형변환 시켜주는 기능을 말한다.
+*/
+
+enum ENUMBER
+{
+	Number_1,	// 0
+	Number_2,	// 1
+	Number_3,	// 2
+	Number_4	// 3
+};
+
+enum class EBUF
+{
+	Attack = 0x1,
+	Armor = 0x2,
+	HP = 0x4,
+	MP = 0x8,
+	Critical = 0x10
+};
+
+enum class EJob
+{
+	Knight = 1,
+	Archer,
+	Magicion
+};
+
+int main()
+{
+	int	Number = 100;
+
+	// enum문은 enum문의 이름 자체가 변수 타입이 된다.
+	// 이렇게 선언된 변수는 해당 enum문의 값의 범위만을 가질
+	// 수 있다.
+	ENUMBER	eNumber = Number_1;
+
+	// 자동으로 형변환 처리가 안될 경우 (ENUMBER)처럼 명시적으로
+	// 형변환을 해주어야 한다.
+	eNumber = (ENUMBER)3;
+
+	// Number_2는 ENUMBER타입의 상수이지만 자동으로 int타입으로
+	// 형변환 처리가 된다.
+	Number = Number_2;
+
+	float	Number1 = 3.14f;
+
+	// 아래의 경우 float타입 값을 int타입으로 암시적인 형변환이
+	// 일어나게 된다. 이때 float타입에 들어가있는 값에서 소수점
+	// 자리를 제거하고 정수부분만을 int에 대입해준다.
+	Number = (int)Number1;
+
+
+	std::cout << ENUMBER::Number_1 << std::endl;
+	std::cout << Number_2 << std::endl;
+	std::cout << Number_3 << std::endl;
+	std::cout << Number_4 << std::endl;
+
+	// enum class는 열거체이름::원하는요소이름 으로 반드시 범위
+	// 를 지정해서 접근해주어야 한다.
+	// enum class는 암시적 형변환이 불가능하다.
+	int	Buf = 0;
+
+	Buf |= (int)EBUF::Attack;
+	Buf |= (int)EBUF::HP;
+	Buf |= (int)EBUF::Critical;
+
+	EBUF	Buf1 = EBUF::Attack;
+	//Buf1 |= EBUF::HP;
+
+	/*
+	switch문 : 분기문의 한 종류이다.
+
+	swtich (변수)
+	{
+	case 체크하고자 하는 상수:
+		원하는 코드
+		break;
+	case 체크하고자 하는 상수:
+		원하는 코드
+		break;
+	case 체크하고자 하는 상수:
+		원하는 코드
+		break;
+	}
+
+	체크하고자 하는 상수의 값은 모두 달라야 한다.
+	변수의 값이 무엇인지를 체크해서 체크하고자 하는 상수에
+	변수의 값이 있다면 해당 case 밑의 코드가 동작이 된다.
+	break를 만나면 switch문을 빠져나간다.
+	*/
+	//std::cout << "Input Number : ";
+	//std::cin >> Number;
+
+	//switch (Number)
+	//{
+	//case 1:
+	//	std::cout << "입력한 숫자는 1 입니다." << std::endl;
+	//	break;
+	//case 2:
+	//	std::cout << "입력한 숫자는 2 입니다." << std::endl;
+	//	break;
+	//case 3:
+	//	std::cout << "입력한 숫자는 3 입니다." << std::endl;
+	//	break;
+	//default:	// 위에서 체크되는 상수중에 값이 없다면 동작된다.
+	//	std::cout << "그 외의 숫자입니다." << std::endl;
+	//	break;
+	//}
+
+	int	Job = 0;
+
+	std::cout << "1. 기사" << std::endl;
+	std::cout << "2. 궁수" << std::endl;
+	std::cout << "3. 마법사" << std::endl;
+	std::cout << "직업을 선택하세요 : ";
+	std::cin >> Job;
+
+	switch ((EJob)Job)
+	{
+	case EJob::Knight:
+		std::cout << "기사를 선택했습니다." << std::endl;
+		break;
+	case EJob::Archer:
+		std::cout << "궁수를 선택했습니다." << std::endl;
+		break;
+	case EJob::Magicion:
+		std::cout << "마법사를 선택했습니다." << std::endl;
+		break;
+	}
+
+	// sizeof : 선언된 변수나 변수 타입의 바이트 수를 얻어오는
+	// 기능이다.
+	std::cout << "int Size : " << sizeof(int) << std::endl;
+	std::cout << "Number Size : " << sizeof(Number) << std::endl;
+	std::cout << "EJob Size : " << sizeof(EJob) << std::endl;
+	std::cout << "ENUMBER Size : " << sizeof(ENUMBER) << std::endl;
+
+	/*
+	반복문 : 특정 코드를 반복해서 수행할때 사용한다.
+	for문, while문, do while문 3가지가 제공된다.
+
+	for (초기값; 조건식; 증감값)
+	{
+		반복해서 실행할 코드
+	}
+
+	초기값 : for문으로 진입할때 1번만 동작이 된다.
+	조건식 : 매번 반복할때마다 동작이 된다.
+	증감값 : 매번 반복할때마다 동작이 된다.
+
+	초기값 -> 조건식 -> true일 경우 코드실행 -> 증감값 ->
+	조건식 -> true일 경우 코드 실행 -> 증감값 -> 조건식 ->
+	......... -> 조건식 -> false일 경우 for문 종료
+	*/
+
+	// 초기값에서 int타입 변수인 i를 선언하고 0으로 초기화한다.
+	
+	for (int i = 0; i < 10; ++i)
+	{
+		std::cout << "i : " << i << std::endl;
+	}
+
+	for (int i = 0; i < 100; i += 2)
+	{
+		std::cout << "i : " << i << std::endl;
+	}
+
+	for (int i = 0; i < 100; ++i)
+	{
+		if (i % 2 == 1)
+			std::cout << "i : " << i << std::endl;
+	}
+
+	for (int i = 0; i < 100; ++i)
+	{
+		if (i % 2 == 0)
+			continue;	// 이 키워드를 만나면 증감값으로 올라간다.
+
+		std::cout << "i : " << i << std::endl;
+	}
+
+	std::cout << "Break Number : ";
+	std::cin >> Number;
+
+	for (int i = 0; i < 100; ++i)
+	{
+		if (i == Number)
+			break;
+
+		std::cout << "i : " << i << std::endl;
+	}
+
+	//for (int i = 10; i < 20; ++i)
+	//{
+	//}
+
+	// i 변수는 for문의 초기값에서 변수를 선언했다.
+	// 이 경우에는 i는 for문 안에서만 사용이 가능한
+	// 변수가 된다.
+	//std::cout << "i : " << i << std::endl;
+
+	// 아래처럼 사용하면 무한반복을 한다.
+	//for (;;)
+	//{
+	//}
+
+	return 0;
+}
