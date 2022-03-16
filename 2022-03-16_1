@@ -1,0 +1,137 @@
+#include <iostream>
+
+int main()
+{
+	/*
+	*****
+	 ****
+	  ***
+	   **
+	    *
+		
+	총 5줄.
+	별은 각 줄마다 1개씩 감소.
+	공백은 각 줄마다 1개씩 증가.
+	한 줄이 끝나면 개행.
+	*/
+	int LineCount = 0;
+	std::cout << "Line : ";
+	std::cin >> LineCount;
+
+	for (int i = 0; i < LineCount; ++i)
+	{
+		//공백은 0, 1, 2, 3, 4...
+		for (int j = 0; j < i; ++j)
+		{
+			std::cout << " ";
+		}
+
+		for (int j = i; j < LineCount; ++j)
+		{
+			std::cout << "*";
+		}
+
+		std::cout << std::endl;
+	}
+
+	/*
+	0   *
+	1  ***
+	2 *****
+	3*******
+
+	총 4줄.
+	별은 1개부터 시작해서 각 줄마다 2개씩 늘어난다.
+	공백은 줄 -1개부터 각 줄마다 1개씩 줄어든다.
+	각 줄이 끝나면 개행한다.
+	*/
+	LineCount = 0;
+	std::cout << "Line : ";
+	std::cin >> LineCount;
+
+	for (int i = 0; i < LineCount; ++i)
+	{
+		//공백은 줄 -1 부터 1개씩 감소.
+		for (int j = i; j < LineCount - 1; ++j)
+		{
+			std::cout << " ";
+		}
+
+		//별은 1개부터 시작해서 각 줄마다 2개씩 늘어난다.
+		/*
+		0 * 2 + 1 = 1
+		1 * 2 + 1 = 3
+		2 * 2 + 1 = 5
+		3 * 2 + 1 = 7
+		*/
+		for (int j = 0; j < i * 2 + 1; ++j)
+		{
+			std::cout << "*";
+		}
+
+		std::cout << std::endl;
+	}
+
+	/*
+	0   *	6
+	1  ***	5
+	2 *****	4
+	3*******3
+	4 *****	2
+	5  ***	1
+	6   *	0
+
+	총 7줄.
+	공백은 3, 2, 1, 0, 1, 2, 3 으로 출력
+	위릐 규칙을 보면 가운데 줄을 중심으로 상 하가 반전되어 있다.
+	각 줄마다 1개씩 감소하고 1개씩 증가한다.
+
+	별은 1, 3, 5, 7, 5, 3, 1 으로 출력.
+	위의 규칙을 보면 가운데 줄을 중심으로 상 하가 반전되어 있다.
+	각 줄마다 1개부터 2개씩 증가하고 2개씩 감소한다.
+	*/
+	LineCount = 0;
+	std::cout << "Line : ";
+	std::cin >> LineCount;
+
+	if (LineCount % 2 == 0)
+		++LineCount;
+
+	//7줄일때 3이 가운데줄
+	//7 / 2 = 3
+	int Half = LineCount / 2;
+
+	for (int i = 0; i < LineCount; ++i)
+	{
+		int LineNumber = i;
+
+		//아래부분일 경우
+		if (i > Half)
+		{
+			//4 = 2, 5 = 1, 6 = 0
+			LineNumber = LineCount - 1 - i;
+		}
+
+		//공백은 줄 -1 부터 1개씩 감소.
+		for (int j = LineNumber; j < Half; ++j)
+		{
+			std::cout << " ";
+		}
+
+		//별은 1개부터 시작해서 각 줄마다 2개씩 늘어난다.
+		/*
+		0 * 2 + 1 = 1
+		1 * 2 + 1 = 3
+		2 * 2 + 1 = 5
+		3 * 2 + 1 = 7
+		*/
+		for (int j = 0; j < LineNumber * 2 + 1; ++j)
+		{
+			std::cout << "*";
+		}
+
+		std::cout << std::endl;
+	}
+
+	return 0;
+}
