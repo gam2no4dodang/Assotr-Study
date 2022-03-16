@@ -1,0 +1,102 @@
+#include <iostream>
+
+int main()
+{
+	/*
+
+	*****
+	 ****
+	  ***
+	   **
+		*
+
+	총 5줄이다.
+	별이 5개부터 하나씩 줄어든다.
+	빈칸이 0부터 4칸까지 늘어난다.
+	*/
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 4 + i; ++j)
+		{
+			std::cout << " ";
+		}
+
+		for (int j = 0; j < 5 - i; ++j)
+		{
+			std::cout << "*";
+		}
+		
+		std::cout << std::endl;
+	}
+
+	/*
+
+	   *
+	  ***
+	 *****
+	*******
+
+	총 4줄이다.
+	별이 양옆으로 각각 하나씩 총 2개씩 많아진다.
+	빈칸이 3칸에서부터 한칸씩 줄어든다.
+	*/
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 4 - i; ++j)
+		{
+			std::cout << " ";
+		}
+
+		for (int j = 0; j < 2 * i - 1; ++j)
+		{
+			std::cout << "*";
+		}
+
+		std::cout << std::endl;
+	}
+
+	/*
+
+	   *
+	  ***
+	 *****
+	*******
+	 *****
+	  ***
+	   *
+	총 7줄이다.
+	별이 양옆으로 각각 하나씩 총 2개씩 많아지다 반대로 줄어든다.
+	빈칸이 3칸에서부터 한칸씩 줄어들다 반대로 많아진다.
+	*/
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 4 - i; ++j)
+		{
+			std::cout << " ";
+		}
+
+		for (int j = 0; j < 2 * i - 1; ++j)
+		{
+			std::cout << "*";
+		}
+
+		std::cout << std::endl;
+	}
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j <= i; ++j)
+		{
+			std::cout << " ";
+		}
+
+		for (int j = 5 ; j > 2 * i ; --j)
+		{
+			std::cout << "*";
+		}
+
+		std::cout << std::endl;
+	}
+
+	return 0;
+}
