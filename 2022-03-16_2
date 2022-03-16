@@ -1,0 +1,66 @@
+#include <iostream>
+#include <time.h>
+
+enum class SRP
+{
+	S = 1,
+	R,
+	P,
+	Exit
+};
+
+int main()
+{
+	srand((unsigned int)time(0));
+	int Random = rand();
+
+	while (true)
+	{
+		system("cls");
+
+		std::cout << "1. 가위" << std::endl;
+		std::cout << "2. 바위" << std::endl;
+		std::cout << "3. 보" << std::endl;
+		std::cout << "4. 종료" << std::endl;
+		std::cout << "Input Player : ";
+		int Player = 0;
+		std::cin >> Player;
+
+		if (Player == (int)SRP::Exit)
+			break;
+
+		else if (Player < (int)SRP::S || Player>(int)SRP::Exit)
+			continue;
+
+		int AI = rand() % (int)SRP::P + 1;
+
+		switch ((SRP)AI)
+		{
+		case SRP::S:
+			std::cout << "AI : 가위" << std::endl;
+			break;
+		case SRP::R:
+			std::cout << "AI : 바위" << std::endl;
+			break;
+		case SRP::P:
+			std::cout << "AI : 보" << std::endl;
+			break;
+		}
+
+		int Result = Player - AI;
+
+		if (Result == 1 || Result == -2)
+			std::cout << "플레이어 승리" << std::endl;
+
+		else if (Result == 0)
+			std::cout << "비김" << std::endl;
+
+		else
+			std::cout << "AI 승리" << std::endl;
+
+		//키를 누르기 전까지 콘솔창에서 일시정지 상태로 만들어준다.
+		system("pause");
+	}
+
+	return 0;
+}
