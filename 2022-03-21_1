@@ -1,0 +1,421 @@
+#include <iostream>
+#include <time.h>
+
+enum class AIType
+{
+	None,
+	Easy,
+	Hard,
+	Max
+};
+
+int main()
+{
+	srand((unsigned int)time(0));
+	int Random = rand();
+
+	int AIState = 0;
+
+	while (true)
+	{
+		system("cls");
+		std::cout << "1. 쉬움" << std::endl;
+		std::cout << "2. 어려움" << std::endl;
+		std::cout << "난이도를 선택하세요 : ";
+		std::cin >> AIState;
+
+		if (AIState > (int)AIType::None &&
+			AIState < (int)AIType::Max)
+			break;
+	}
+
+	int Number[25] = {};
+	int AINumber[25] = {};
+
+	for (int i = 0; i < 25; ++i)
+	{
+		Number[i] = i + 1;
+		AINumber[i] = i + 1;
+	}
+
+	for (int i = 0; i < 100; ++i)
+	{
+		int Idx1 = rand() % 25;
+		int Idx2 = rand() % 25;
+
+		int Temp = Number[Idx1];
+		Number[Idx1] = Number[Idx2];
+		Number[Idx2] = Temp;
+
+		Idx1 = rand() % 25;
+		Idx2 = rand() % 25;
+
+		Temp = AINumber[Idx1];
+		AINumber[Idx1] = AINumber[Idx2];
+		AINumber[Idx2] = Temp;
+	}
+
+	int Line = 0, AILine = 0;
+
+	//인공지능이 선택을 하기 위해서 현재 안바뀐 값을 저장할 배열을 만들어준다.
+	int SelectArray[25] = {};
+
+	//AI가 현재 선택할 수 있는 숫자가 몇개인지를 저장할 변수를 만들어준다.
+	int SelectCount = 0;
+
+	while (true)
+	{
+		system("cls");
+
+		std::cout << "============ Player ================================================= AI =================" << std::endl;
+
+		for (int i = 0; i < 5; ++i)
+		{
+			for (int j = 0; j < 5; ++j)
+			{
+				if (Number[i * 5 + j] == INT_MAX)
+					std::cout << "*\t";
+
+				else
+					std::cout << Number[i * 5 + j] << "\t";
+			}
+
+			std::cout << "\t\t";
+
+			for (int j = 0; j < 5; ++j)
+			{
+				std::cout << "*\t";
+				//if (AINumber[i * 5 + j] == INT_MAX)
+				//	std::cout << "*\t";
+
+				//else
+				//	std::cout << AINumber[i * 5 + j] << "\t";
+			}
+			std::cout << std::endl;
+		}
+		std::cout << "Bingo Line : " << Line;
+		std::cout << "\t\t\t\t\t\t";
+		std::cout << "AI Bingo Line : " << AILine << std::endl;
+
+		if (Line >= 5)
+		{
+			std::cout << "Player Win" << std::endl;
+			break;
+		}
+
+		else if (AILine >= 5)
+		{
+			std::cout << "AI Win" << std::endl;
+			break;
+		}
+
+		std::cout << "Input Number(0 : Exit) : ";
+		int CheckNumber = 0;
+		std::cin >> CheckNumber;
+
+		if (CheckNumber == 0)
+			break;
+
+		else if (CheckNumber < 0 || CheckNumber>25)
+			continue;
+
+		bool Check = false;
+
+		for (int i = 0; i < 25; ++i)
+		{
+			if (Number[i] == CheckNumber)
+			{
+				Number[i] = INT_MAX;
+				Check = true;
+				break;
+			}
+		}
+
+		if (!Check)
+			continue;
+
+		for (int i = 0; i < 25; ++i)
+		{
+			if (AINumber[i] == CheckNumber)
+			{
+				AINumber[i] = INT_MAX;
+				break;
+			}
+		}
+
+		switch ((AIType)AIState)
+		{
+		case AIType::Easy:
+			SelectCount = 0;
+
+			for (int i = 0; i < 25; ++i)
+			{
+				if (AINumber[i] != INT_MAX)
+				{
+					SelectArray[SelectCount] = AINumber[i];
+					++SelectCount;
+				}
+			}
+
+			CheckNumber = SelectArray[rand() % SelectCount];
+			break;
+		case AIType::Hard:
+		{
+			//전체 12줄 중 완성된 줄을 제외하고 나머지 미완성된 줄을 체크하여
+			//*의 수가 가장 많은 줄을 찾는다.
+			int StarCount = 0;
+			int CheckLine = 0;
+
+			//Find는 한 줄에 별이 4개짜리 줄이 있을 경우 true로 바꾸어서
+			//대각선 줄을 체크 안하도록 해주는 변수이다.
+			bool Find = false;
+			for (int i = 0; i < 5; ++i)
+			{
+				//가로 한줄의 별 수를 체크하기 위한 변수
+				int LineSatrCount = 0;
+				int LineSatrCount1 = 0;
+
+				for (int j = 0; j < 5; ++j)
+				{
+					//가로 줄 체크를 하는데 값이 *로 표시되는 INT_MAX일 경우 
+					//이 줄의 별 수를 증가시킨다.
+					if (AINumber[i * 5 + j] == INT_MAX)
+						++LineSatrCount;
+
+					//세로 줄 체크를 하는데 값이 *로 표시되는 INT_MAX일 경우 
+					//이 줄의 별 수를 증가시킨다.
+					if (AINumber[j * 5 + i] == INT_MAX)
+						++LineSatrCount;
+				}
+
+				//현재의 가로 줄이 기존에 체크해두었던 줄의 별 수보다크다면
+				//현재 줄이 가능성이 높은 줄이 된다.
+				//LineStarCount < 5 를 한 이유는 한 줄이 완성이 안되었을 경우에만
+				//처리를 해야하기 때문이다.
+				if (StarCount < LineSatrCount && LineSatrCount < 5)
+				{
+					StarCount = LineSatrCount;
+					CheckLine = i;
+
+					if (StarCount == 4)
+					{
+						Find = true;
+						break;
+					}
+				}
+
+				//현재의 세로 줄이 기존에 체크해두었던 줄의 별 수보다크다면
+				//현재 줄이 가능성이 높은 줄이 된다.
+				//LineStarCount < 5 를 한 이유는 한 줄이 완성이 안되었을 경우에만
+				//처리를 해야하기 때문이다.
+				if (StarCount < LineSatrCount1 && LineSatrCount1 < 5)
+				{
+					StarCount = LineSatrCount1;
+					CheckLine = i + 5;
+
+					if (StarCount == 4)
+					{
+						Find = true;
+						break;
+					}
+				}
+			}
+
+			//Find 변수는 *이 4개짜리인 줄을 찾았을때 true가 되므로
+			//false일때만 대각선을 체크해주도록 한다.
+			if (!Find)
+			{
+				int LinStarCount = 0;
+
+				//왼쪽 상단 -> 오른쪽 하단 대각선
+				for (int i = 0; i < 25; i += 6)
+				{
+					if (AINumber[i] == INT_MAX)
+						++LinStarCount;
+				}
+
+				if (StarCount < LinStarCount && LinStarCount < 5)
+				{
+					StarCount = LinStarCount;
+					CheckLine = 10;
+
+					//*이 4개라면 다른 줄을 체크하더라도 이 이상의 줄이 
+					//없으므로 이 줄을 선택하도록 한다.
+					if (StarCount == 4)
+					{
+						Find = true;
+						break;
+					}
+				}
+
+				if (!Find)
+				{
+					LinStarCount = 0;
+
+					//오른쪽 상단 -> 왼쪽 하단 대각선
+					for (int i = 4; i < 21; i += 4)
+					{
+						if (AINumber[i] == INT_MAX)
+							++LinStarCount;
+					}
+
+					if (StarCount < LinStarCount && LinStarCount < 5)
+					{
+						StarCount = LinStarCount;
+						CheckLine = 11;
+					}
+				}
+			}
+
+			//가로줄 중 하나가 최종 줄로 선정되었을 경우
+			if (CheckLine <= 4)
+			{
+				//예를 들어 가로 2번째 줄이 선정되었다면 CheckLine은 
+				//1이 저장되어 있을 것이다.
+				//이 경우 1 * 5 + 0 ~ 4 가 되므로 5 ~ 9 번 인덱스를
+				//의미 하므로 가로 2번째 줄을 하나씩 체크하게 되는 것이다.
+				for (int i = 0; i < 5; ++i)
+				{
+					if (AINumber[CheckLine * 5 + i] != INT_MAX)
+					{
+						CheckNumber = AINumber[CheckLine * 5 + i];
+						break;
+					}
+				}
+			}
+
+			//세로줄 중 하나가 최종 줄로 선정되었을 경우
+			else if (CheckLine <= 9)
+			{
+				for (int i = 0; i < 5; ++i)
+				{
+					if (AINumber[i * 5 + (CheckLine - 5)] != INT_MAX)
+					{
+						CheckNumber = AINumber[i * 5 + (CheckLine - 5)];
+						break;
+					}
+				}
+			}
+
+			//왼쪽 상단 -> 오른쪽 하단
+			else if (CheckLine == 10)
+			{
+				for (int i = 0; i < 25; i += 6)
+				{
+					if (AINumber[i] != INT_MAX)
+					{
+						CheckNumber = AINumber[i];
+						break;
+					}
+				}
+			}
+
+			//오른쪽 상단 -> 왼쪽 하단
+			else
+			{
+				for (int i = 4; i < 21; i += 4)
+				{
+					if (AINumber[i] != INT_MAX)
+					{
+						CheckNumber = AINumber[i];
+						break;
+					}
+				}
+			}
+		}
+			break;
+		}
+		std::cout << "AI Select : " << CheckNumber << std::endl;
+
+		for (int i = 0; i < 25; ++i)
+		{
+			if (Number[i] == CheckNumber)
+			{
+				Number[i] = INT_MAX;
+				break;
+			}
+		}
+
+		for (int i = 0; i < 25; ++i)
+		{
+			if (AINumber[i] == CheckNumber)
+			{
+				AINumber[i] = INT_MAX;
+				break;
+			}
+		}
+
+		Line = 0;
+		AILine = 0;
+
+		for (int i = 0; i < 5; ++i)
+		{
+			int CheckCount = 0, CheckCount1 = 0;
+			int AICheckCount = 0, AICheckCount1 = 0;
+
+			for (int j = 0; j < 5; ++j)
+			{
+				if (Number[i * 5 + j] == INT_MAX)
+					++CheckCount;
+
+				if (Number[j * 5 + i] == INT_MAX)
+					++CheckCount1;
+
+				if (AINumber[i * 5 + j] == INT_MAX)
+					++AICheckCount;
+
+				if (AINumber[j * 5 + i] == INT_MAX)
+					++AICheckCount1;
+			}
+
+			if (CheckCount == 5)
+				++Line;
+
+			if (CheckCount1 == 5)
+				++Line;
+
+			if (AICheckCount == 5)
+				++AILine;
+
+			if (AICheckCount1 == 5)
+				++AILine;
+		}
+
+		int CheckCount2 = 0, AICheckCount2 = 0;
+
+		for (int i = 0; i < 25; i += 6)
+		{
+			if (Number[i] == INT_MAX)
+				++CheckCount2;
+
+			if (AINumber[i] == INT_MAX)
+				++AICheckCount2;
+		}
+
+		if (CheckCount2 == 5)
+			++Line;
+
+		if (AICheckCount2 == 5)
+			++AILine;
+
+		CheckCount2 = 0;
+		AICheckCount2 = 0;
+
+		for (int i = 4; i < 20; i += 4)
+		{
+			if (Number[i] == INT_MAX)
+				++CheckCount2;
+
+			if (AINumber[i] == INT_MAX)
+				++AICheckCount2;
+		}
+
+		if (CheckCount2 == 5)
+			++Line;
+
+		if (AICheckCount2 == 5)
+			++AILine;
+	}
+
+	return 0;
+}
