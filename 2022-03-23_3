@@ -1,0 +1,152 @@
+
+#include <iostream>
+#include <time.h>
+
+void SetNumber(int* Array)
+{
+	for (int i = 0; i < 9; ++i)
+	{
+		Array[i] = i + 1;
+	}
+
+	for (int i = 0; i < 100; ++i)
+	{
+		int	Idx1 = rand() % 9;
+		int	Idx2 = rand() % 9;
+
+		int	Temp = Array[Idx1];
+		Array[Idx1] = Array[Idx2];
+		Array[Idx2] = Temp;
+	}
+}
+
+void Check(int* Number, int* Input,
+	int& Strike, int& Ball)
+{
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			if (Number[i] == Input[j])
+			{
+				if (i == j)
+					++Strike;
+
+				else
+					++Ball;
+
+				break;
+			}
+		}
+	}
+}
+
+bool ResultCheck(int Strike, int Ball)
+{
+	if (Strike == 3)
+	{
+		std::cout << "Player Win" << std::endl;
+		return true;
+	}
+
+	else if (Strike == 0 && Ball == 0)
+		std::cout << "Out" << std::endl;
+
+	else
+		std::cout << Strike << " Strike " << Ball << " Ball" << std::endl;
+
+	//게임을 종료시키면 안되기 때문에 false를 반환한다.
+	return false;
+}
+
+int main()
+{
+	srand((unsigned int)time(0));
+	int Random = rand();
+
+	int	Number[9] = {};
+
+	while (true)
+	{
+		std::cout << "* * *" << std::endl;
+		/*for (int i = 0; i < 3; ++i)
+		{
+			std::cout << Number[i] << "\t";
+		}
+
+		std::cout << std::endl;*/
+
+		/*std::cout << Number[0] << "\t" << Number[1] << "\t" <<
+			Number[2] << std::endl;*/
+
+			// 입력받을 숫자 배열
+		int	Input[3] = {};
+
+		bool	InputFail = false;
+		bool	Exit = false;
+
+		// 0 : 1 1 : 1
+		for (int i = 0; i < 3;)
+		{
+			std::cout << i + 1 << " Input(0 : Exit) : ";
+			std::cin >> Input[i];
+
+			if (Input[i] < 0 || Input[i] > 9)
+			{
+				InputFail = true;
+				break;
+			}
+
+			else if (Input[i] == 0)
+			{
+				Exit = true;
+				break;
+			}
+
+			// 숫자는 정상. 단, 앞에서 입력한 숫자와 중복된
+			// 숫자가 입력되었는 지를 판단한다.
+			bool	Acc = false;
+			for (int j = 0; j < i; ++j)
+			{
+				if (Input[i] == Input[j])
+				{
+					Acc = true;
+					break;
+				}
+			}
+
+			// 값이 중복이 안되었다면 i값을 1 증가시켜서
+			// 다음 값을 입력받도록 한다.
+			// 중복이라면 해당 인덱스에 값을 다시 입력받게
+			// 될것이다.
+			if (!Acc)
+				++i;
+		}
+
+		if (Exit)
+			break;
+
+		else if (InputFail)
+			continue;
+
+		// || 연산이기 때문에 3개의 조건중 하나라도 true가 나오면
+		// if문 안으로 들어가서 게임을 종료하게 된다.
+		/*if (Input[0] == 0 || Input[1] == 0 || Input[2] == 0)
+			break;
+
+		else if (Input[0] < 0 || Input[0] > 9 ||
+			Input[1] < 0 || Input[1] > 9 ||
+			Input[2] < 0 || Input[2] > 9)
+			continue;*/
+
+		int	Strike = 0, Ball = 0;
+
+		Check(Number, Input, Strike, Ball);
+
+		if (ResultCheck(Strike, Ball) == true)
+			break;
+		
+	}
+
+	return 0;
+}
