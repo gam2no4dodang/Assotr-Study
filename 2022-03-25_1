@@ -1,0 +1,67 @@
+#include <iostream>
+
+/*
+#define은 전처리기이다.
+
+#define 이름 코드
+
+코드에서 원하는 부분에 #define의 이름을 넣어주면 이름 뒤에 있는 
+코드를 컴파일 전에 그곳에 붙여넣어주고 해당 코드로 컴파일을 진행해준다.
+
+#define은 한줄로 작성해야한다.
+
+가독성이 좀 떨어질 수 있다.
+디버깅 안됨
+*/
+#define COUNT 30
+#define OUTPUTTEXT std::cout<<"TestOutput"<<std::endl;
+#define TESTF(Number) std::cout<<Number<<std::endl;
+
+/*
+재귀함수 : 함수 안에서 자기 자신을 호출하는 함수를 말한다.
+재귀함수를 사용할때에는 반드시 종료부분을 만들어주어야한다.
+재귀함수를 종료한다는 것은 더이상 자기자신을 호출하는 것을 막아주는 것이다.
+*/
+//void Output(int Number)
+//{
+//	Output(Number); //무한호출
+//}
+int Factorial(int Number)
+{
+	if (Number == 1)
+		return 1;
+
+	return Number * Factorial(Number - 1);
+}
+
+/*
+꼬리재귀 : 재귀 호출이 끝나면 아무 일도 하지 않고 결과만 
+바로 반환되도록 하는 방법
+
+컴퓨터가 최적화되있을시 해석시 do while로 해석함
+*/
+int FactorialTail(int Number, int Result = 1)
+{
+	if (Number == 1)
+		return Result;
+
+	return FactorialTail(Number - 1, Number * Result);
+}
+
+int Add(int N1, int N2)
+{
+	return N1 + N2;
+}
+
+int main()
+{
+	std::cout << Factorial(5) << std::endl;
+	std::cout << FactorialTail(5) << std::endl;
+
+	std::cout << COUNT << std::endl;
+
+	OUTPUTTEXT
+	TESTF(300)
+
+	return 0;
+}
