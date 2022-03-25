@@ -1,0 +1,107 @@
+#include <iostream>
+
+int main()
+{
+	/*
+	char : 1바이트를 차지하는 문자
+
+	wchar_t : 2바이트를 차지하는 문자
+
+	한글은 1글자당 2바이트를 차지하므로 char에 저장할 때는 2개의 
+	공간이 필요하다.
+	문자열의 끝은 0(널문자) 로 표현이 되어야 한다.
+	0으로 초기화 해주고 사용하도록 하자.
+	*/
+	char Text[64] = {};
+	char Text1[64] = "문자열입니다.";
+
+	std::cout << Text1 << std::endl;
+
+	/*
+	strcpy_s : 문자열 복사 함수
+
+	1번 인자가 배열로 들어갈 경우 인자가 2개이다.
+	1번 인자에 2번 인자에 들어간 문자열을 복사해주게된다.
+	1번 인자가 포인터일 경우 인자가 3개이다.
+	1번 인자에 3번 인자의 문자열을 2번 인자의 크기만큼 복사해주게 된다.
+	strcpy는 예전버전의 함수이기 때문에 가급적 strcpy_s를 사용해야 한다.
+	*/
+	strcpy_s(Text, "TestCopy");
+
+	std::cout << Text << std::endl;
+
+	char* pText = Text;
+
+	strcpy_s(pText, 10, "다시 복사");
+
+	std::cout << Text << std::endl;
+
+	/*
+	문자열 리터럴은 rodata 영역에 저장이 된다. = 읽기전용이다.
+	문자열 리터럴은 const char* 로인식한다
+	*/
+	std::cout << "문자열 리터럴" << std::endl;
+
+	const char* pText1 = "메모리 주소";
+
+	std::cout << pText1 << std::endl;
+
+	/*
+	strlen 함수를 이용해서 문자열의 수를 얻어올 수 있다.
+	널문자를 제외한 실제 문자열 개수가 몇개인지를 얻어온다.
+	*/
+	std::cout << "Count : " << strlen(pText1) << std::endl;
+
+	//strcat_s : 문자열을 붙여주는 함수이다.
+	strcat_s(Text, "문자열을 붙여보자.");
+
+	std::cout << Text << std::endl;
+
+	/*
+	strcmp : 문자열 비교 함수이다.
+	문자열이 같을 경우 0을 반환한다.
+	0이 아니면 다르다는 의미이다.
+	*/
+	if (strcmp(Text, "다시 복사 문자열을 붙여보자!!.") == 0)
+	{
+		std::cout << "두 문자열이 같다." << std::endl;
+	}
+
+	/*
+	memset : 메모리를 내가 원하는 크기만큼 원하는 값으로 채워주고자
+	할때 사용한다.
+	단, 1바이트 단위로 값을 채워준다.
+	*/
+	int NumberArray[10] = { 1, 2, 3, 4, 5 };
+
+	/*
+	1번 인자 : 메모리 주소
+	2번 인자 : 채워줄 값
+	3번 인자 : 채워줄 메모리 크기
+	*/
+	memset(NumberArray, 1, sizeof(int) * 10);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		std::cout << NumberArray[i] << std::endl;
+	}
+
+	//memcpy : 메모리를 복사할때 사용된다.
+	int NumberArray1[10] = {};
+
+	/*
+	1번 인자 : 메모리 주소
+	2번 인자 : 복사할 메모리 주소
+	3번 인자 : 복사할 메모리 크기
+	1번 인자의 주소에 2번 인자의 주소로부터 3번 인자의 크기만큼을 복사한다.
+	*/
+	memcpy(NumberArray1, NumberArray, sizeof(int) * 10);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		std::cout << NumberArray1[i] << std::endl;
+	}
+
+	return 0;
+
+}
