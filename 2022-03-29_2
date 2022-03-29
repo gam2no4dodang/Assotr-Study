@@ -1,0 +1,89 @@
+#include <iostream>
+
+enum class EItemType
+{
+	Wespon,
+	Armor
+};
+
+struct ItemInfo
+{
+	char Name[32];
+	EItemType Type;
+	int Option;
+	int Price;
+	int Sell;
+};
+
+int main()
+{
+	FILE* File = nullptr;
+
+	fopen_s(&File, "Test.tmo", "rb");
+
+	if (File)
+	{
+		/*
+		fseek : 파일 커서의 위치를 원하는 위치로 변경해주는 함수
+		3번 인자 : 기준점을 정한다.
+		SEEK_END : 파일의 가장 끝
+		SEEK_SET : 파일의 시작점
+		SEEK_CUR : 현재 파일 커서
+		2번 인자는 Offset으로 3번 인자에 지정된 지점으로 부터
+		몇 바이트 만큼 떨어진 곳을 커서의 위치로 지정할지를 정한다.
+		아래는 파일 커서를 가장 끝으로 보낸다.
+		*/
+		fseek(File, 0, SEEK_END);
+
+		//ftell : 현재 파일 커서의 위치를 받아온다.
+		int FIleSize = ftell(File);
+
+		std::cout << "File Size : " << FIleSize << std::endl;
+
+		//파일 커서를 다시 처음으로 옮겨서 파일의 내용을
+		//읽어올 수 있도록 한다.
+		fseek(File, 0, SEEK_SET);
+
+		int Number = 0;
+
+		/*
+		1번 인자 : 읽어오고자 하는 메모리 주소
+		2번 인자 : 읽어오고자 하는 데이터의 타입 크기
+		3번 인자 : 읽어오고자 하는 데이터 개수
+		*/
+		fread(&Number, sizeof(int), 1, File);
+
+		std::cout << Number << std::endl;
+
+		int Array[10] = {};
+
+		fread(Array, sizeof(int), 10, File);
+
+		for (int i = 0; i < 10; ++i)
+		{
+			std::cout << Array[i] << std::endl;
+		}
+
+		ItemInfo Item = {};
+
+		fread(&Item, sizeof(ItemInfo), 1, File);
+
+		std::cout << "아이템 이름 : " << Item.Name << std::endl;
+		std::cout << "종류 : ";
+		switch (Item.Type)
+		{
+		case EItemType::Wespon:
+			std::cout << "무기" << std::endl;
+			break;
+		case EItemType::Armor:
+			std::cout << "방어구" << std::endl;
+			break;
+		}
+		std::cout << "옵션 : " << Item.Option << std::endl;
+		std::cout << "Price : " << Item.Price << std::endl;
+		std::cout << "Sell : " << Item.Sell << std::endl;
+
+		fclose(File);
+	}
+	return 0;
+}
