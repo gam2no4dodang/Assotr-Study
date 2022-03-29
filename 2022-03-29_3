@@ -1,0 +1,127 @@
+#include <iostream>
+#include <time.h>
+
+/*
+클래스 : 구조체처럼 여러 변수를 모아두고 하나로 묶어서 사용할 수 있는
+기능을 제공한다.
+클래스에서는 필요한 함수들도 구현하여 멤버로 둘 수 있다.
+C++에서는 객체를 만들기 위한 수단으로 클래스를 제공한다.
+
+구조체는 예전 C버전 에서는 변수만 모아두고 함수를 모아둘 수 없었다.
+하지만 C++에서는 클래스와 마찬가지로 함수도 모아두고 사용할 수 있다.
+단, 기본적인 차이점은 멤버에 접근할때 기본적인 접근 방식에서의 차이가 있다.
+구조체는 기본적으로 public으로 되어있다.
+클래스는 기본적으로 private으로 되어있다.
+
+객체 : C++에서 객체는 모든 변수를 객체라고 부를 수 있다.
+그런데 보통 객체라고 하면 클래스를 이용해서 만들어준 변수를 의미하는
+경우가 많다.
+
+객체지향 프로그래밍 : 원하는 객체들을 만들어서 조립하여 프로그램을 
+완성해 나가는 방식을 말한다.
+객체들은 프로그램을 만들어나가기 위한 하나의 부품이 되고 이 부품을 조립하여
+완성됨 프로그램을 만들어 나가는 방식인 것이다.
+
+컴포넌트지향 프로그래밍 : 컴포넌트라는 부품을 만들고 이 부품을 조립할
+일종의 기판을 만들어준다.
+컴포넌트 클래스, 기판 클래스 이런식으로 나눠둔 후에 기판클래스에 어떤
+컴포넌트들을 조립하느냐에 따라 객체가 달라지는 프로그래밍 방식을 말한다.
+
+캡슐화 : 여러 변수와 함수를 모아서 하나의 클래스 혹은 구조체로 
+만들어주는 것을 만한다.
+
+은닉화 : 클래스에서 제공하는 멤버를 외부에 공개하는 수준을 정하는 것을 말한다.
+
+클래스 내부 : 클래스에 만들어져있는 함수 안
+클래스 외부 : 클래스에 만들어진 함수가 아니라 다른 함수 안을 말한다.
+
+public : 클래스의 내부 혹은 외부에서 모두 접근이 가능한 것을 말한다.
+
+private : 클래스 내부에서만 접근이 가능하고 외부에서는 접근이 불가능하다.
+
+protected : 상속할때 다시 설명
+*/
+
+class CPlayer
+{
+public: //이렇게 해주면 다른 지정자를 만나기 전까지 모두 public
+	//m_을 붙여주는 이유는 멤버 변수임을 표현하기 위해서이다.
+	char m_Name[32];
+	int m_Attack;
+
+private:
+	int m_Armor;
+	int m_HP;
+
+public:
+	void SetArmor(int Armor)
+	{
+		m_Armor = Armor;
+	}
+
+	int GetArmor()
+	{
+		return m_Armor;
+	}
+};
+
+class CGameManager
+{
+private:
+	int m_Number[25];
+
+public:
+	void Init()
+	{
+		for (int i = 0; i < 25; ++i)
+		{
+			m_Number[i] = i + 1;
+		}
+
+		for (int i = 0; i < 100; ++i)
+		{
+			int idx1 = rand() % 25;
+			int idx2 = rand() % 25;
+
+			int Temp = m_Number[idx1];
+			m_Number[idx1] = m_Number[idx2];
+			m_Number[idx2] = Temp;
+		}
+	}
+
+	void Output()
+	{
+		for (int i = 0; i < 5; ++i)
+		{
+			for (int j = 0; j < 5; ++j)
+			{
+				std::cout << m_Number[i * 5 + j] << "\t";
+			}
+			std::cout << std::endl;
+		}
+	}
+};
+
+int main()
+{
+	srand(time(0));
+	int Random = rand();
+
+	CPlayer player;
+	
+	strcpy_s(player.m_Name, "티모");
+
+	player.SetArmor(10);
+
+	strcpy_s(player.m_Name, "베인");
+
+	std::cout << player.GetArmor() << std::endl;
+
+	CGameManager Manager;
+
+	Manager.Init();
+
+	Manager.Output();
+
+	return 0;
+}
