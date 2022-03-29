@@ -1,0 +1,56 @@
+#include <iostream>
+
+enum class EItemTyep
+{
+	Weapon,
+	Armor
+};
+
+struct ItemInfo
+{
+	char Name[32];
+	EItemTyep Type;
+	int Option;
+	int price;
+	int Sell;
+};
+
+int main()
+{
+	FILE* File = nullptr;
+
+	fopen_s(&File, "Test.tmo", "wb");
+
+	if (File)
+	{
+		int Number = 129864;
+
+		/*
+		1번 인자 : 저장하고자 하는 메모리 주소
+		2번 인자 : 저장하고자 하는 데이터의 타입 크기
+		3번 인자 : 저장하고자 하는 데이터 개수
+		*/
+		fwrite(&Number, sizeof(int), 1, File);
+
+		int Array[10] = {};
+		for (int i = 0; i < 10; ++i)
+		{
+			Array[i] = i + 1;
+		}
+
+		fwrite(Array, sizeof(int), 10, File);
+
+		ItemInfo Item = {};
+
+		strcpy_s(Item.Name, "단검");
+		Item.Type = EItemTyep::Weapon;
+		Item.Option = 10;
+		Item.price = 1000;
+		Item.Sell = 500;
+
+		fwrite(&Item, sizeof(ItemInfo), 1, File);
+
+		fclose(File);
+	}
+	return 0;
+}
