@@ -1,0 +1,71 @@
+#include <iostream>
+
+/*
+typedef : 변수 타입을 재정의해서 나만의 이름을 갖는 변수 타입을 
+만들어준다.
+*/
+
+typedef int Teemo;
+typedef unsigned int unit;
+
+/*
+template : 컴파일 전에 타입을 원하는 타입으로 정할 수 있게 만들어주는
+기능이다.
+원할때 다른 타입으로 인식시켜 사용할 수 있도록 해준다.
+
+구조체, 클래스, 함수에서 사용이 가능하다.
+
+template <typename 원하는이름>
+template <class 원하는이름>
+
+위 2가지고 모두 똑같다.
+원하는이름 : 여기에 들어간 이름이 변수의 타입으로 사용이 가능하다.
+
+template <typename 원하는이름, typename 원하는이름2>
+위처럼 타입을 여러개 구성해줄 수도 있다.
+*/
+template <typename T>
+T Add(T Num1, T Num2)
+{
+	return Num1 + Num2;
+}
+
+template <typename T>
+void Safe_Delete(T*& p)
+{
+	if (p)
+	{
+		delete p;
+		p = nullptr;
+	}
+}
+
+template <typename T>
+struct Point
+{
+	T x, y;
+};
+
+int main()
+{
+	Teemo Number = 200;
+
+	//템플릿 함수를 호출할때는 함수명<타입>() 의 형태로
+	//호출이 가능하다.
+	std::cout << Add<int>(10, 20) << std::endl;
+
+	std::cout << Add<float>(3.14f, 3.33f) << std::endl;
+
+	//템플릿 함수에 타입을 지정안하면 인자로 들어간 타입으로
+	//자동 지정된다. 여기서는 int로 T가 지정된다.
+	std::cout << Add(50, 70) << std::endl;
+
+	int* Num11 = new int;
+
+	Safe_Delete(Num11);
+
+	Point<int>		pt1;
+	Point<float>	pt2;
+
+	return 0;
+}
