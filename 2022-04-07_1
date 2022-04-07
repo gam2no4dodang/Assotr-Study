@@ -1,0 +1,164 @@
+#include <iostream>
+
+/*
+operator : 연산자 재정의
+구조체나 클래서에서 연산자를 재정의하여 나만의 연산기능을
+만들어주는 기능이다.
+일종의 함수화 같다.
++ 를 재정의하면 + 함수를 만들어준다고 보면 된다.
+*/
+struct Point
+{
+	int x, y;
+	/*
+	Point operator + (Point pr)
+	{
+	}
+	*/
+
+	/*
+	참조를 이용해서 값을 얻어오는 것이 복사를 해서 값을 얻어오는
+	것보다 빠르다.
+	함수의 뒤에 const를 붙여주면 이 함수에서는 멤버변수의 값을
+	변경할 수 없다.
+	const 객체는 뒤에 const가 붙어있는 함수만 호출이 가능하다.
+	*/
+	Point operator + (const Point& pt) const
+	{
+		Point Result;
+		Result.x = x + pt.x;
+		Result.y= y + pt.y;
+
+		return Result;
+	}
+
+	Point operator + (int Number) const
+	{
+		Point Result;
+		Result.x = x + Number;
+		Result.y = y + Number;
+
+		return Result;
+	}
+	
+	Point operator % (const Point& pt)
+	{
+		Point Result;
+		Result.x = x % pt.x;
+		Result.y = y % pt.y;
+
+		return Result;
+	}
+
+	void operator << (const char* Text)
+	{
+		std::cout << Text << std::endl;
+	}
+
+	//stze_t : x86일때 4바이트 정수 x64일때 8바이트 정수
+	void* operator new (size_t Size)
+	{
+		std::cout << "동적할당!!" << std::endl;
+		return nullptr;
+	}
+
+	//전치연산
+	Point operator ++()
+	{
+		++x;
+		++y;
+		return *this;
+	}
+
+	//후치연산
+	Point operator ++(int)
+	{
+		++x;
+		++y;
+		return *this;
+	}
+
+	void operator = (const Point& pt)
+	{
+		x = pt.x;
+		y = pt.y;
+	}
+
+	bool operator == (const Point& pt)
+	{
+		return x == pt.x && y == pt.y;
+	}
+
+	struct Element
+	{
+		int Number;
+		int Number1;
+	};
+
+	struct Container
+	{
+		Element* Array;
+		int Count;
+		int MaxCount;
+
+		Container() :
+			Count(0),
+			MaxCount(10)
+		{
+			Array = new Element[MaxCount];
+		}
+
+		~Container()
+		{
+			delete[] Array;
+		}
+
+		void operator + (const Element& element)
+		{
+			if (Count == MaxCount)
+				return;
+
+			Array[Count] = element;
+			++Count;
+
+			std::cout << "Count : " << Count << std::endl;
+		}
+	};
+
+	int main()
+	{
+		Point* pPt = new Point;
+		Point pt1, pt2, pt3;
+		const Point pt4;
+		pt1.x = 10;
+		pt1.y = 20;
+
+		pt2.x = 30;
+		pt2.y = 40;
+
+		//pt1의 + operator를 호출하는데 인자로 pt2를 넘겨준다.
+		pt3 = pt1 + pt2;
+
+		pt3 = pt1 + 100;
+
+		//pt3 = pt4 + 300;
+
+		++pt3;
+		pt3++;
+
+		std::cout << "x : " << pt3.x << ", y : " << pt3.y <<
+			std::endl;
+
+		pt1 << "텍스트 출력";
+
+		Container con;
+
+		Element e1, e2, e3;
+
+		con + e1;
+		con + e2;
+		con + e3;
+
+		return 0;
+	}
+};
